@@ -1,0 +1,9 @@
+SECRET_KEY=sample
+
+PGDB_NAME=postgres
+PGDB_USER=postgres
+PGDB_PASSWORD=postgres
+PGDB_HOST=shop_db
+PGDB_PORT=5432
+
+SHOW_DEBUGGER_TOOLBAR=True
