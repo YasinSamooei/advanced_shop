@@ -129,7 +129,8 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # email config
 
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+# EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 EMAIL_HOST = config("EMAIL_HOST", default="smtp4dev")
 EMAIL_USE_TLS = config("EMAIL_USE_TLS", cast=bool, default=False)
 EMAIL_USE_SSL = config("EMAIL_USE_SSL", cast=bool, default=False)
@@ -152,6 +153,6 @@ if SHOW_DEBUGGER_TOOLBAR:
     INTERNAL_IPS = [ip[: ip.rfind(".")] + ".1" for ip in ips] + ["127.0.0.1", "10.0.2.2"]
 
 # accounts model settings
-AUTH_USER_MODEL = 'apps.accounts.User'
+AUTH_USER_MODEL = 'accounts.User'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'

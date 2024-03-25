@@ -12,7 +12,7 @@ class CustomUserAdmin(UserAdmin):
     """
 
     model = User
-    list_display = ("id","email", "is_superuser", "is_active", "is_verified")
+    list_display = ("id", "email", "is_superuser", "is_active", "is_verified")
     list_filter = ("email", "is_superuser", "is_active", "is_verified")
     searching_fields = ("email",)
     ordering = ("email",)
@@ -37,7 +37,7 @@ class CustomUserAdmin(UserAdmin):
         (
             "group permissions",
             {
-                "fields": ("groups", "user_permissions","type"),
+                "fields": ("groups", "user_permissions", "type"),
             },
         ),
         (
@@ -66,18 +66,24 @@ class CustomUserAdmin(UserAdmin):
         ),
     )
 
+
 class CustomProfileAdmin(admin.ModelAdmin):
-    list_display = ("id","user", "first_name","last_name","phone_number")
-    searching_fields = ("user","first_name","last_name","phone_number")
+    list_display = ("id", "user", "first_name", "last_name", "phone_number")
+    searching_fields = ("user", "first_name", "last_name", "phone_number")
 
 
-admin.site.register(Profile,CustomProfileAdmin)
+admin.site.register(Profile, CustomProfileAdmin)
 admin.site.register(User, CustomUserAdmin)
 
 from django.contrib.sessions.models import Session
+
+
 class SessionAdmin(admin.ModelAdmin):
     def _session_data(self, obj):
         return obj.get_decoded()
+
     list_display = ['session_key', '_session_data', 'expire_date']
     readonly_fields = ['_session_data']
+
+
 admin.site.register(Session, SessionAdmin)

@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+    check otp
+{% endblock %}
+
+{% block content %}
+
+
+    <div class="sign-in-page-data">
+        <div class="sign-in-from w-100 m-auto">
+            <h3 class="mb-3 text-center">check otp</h3>
+            {% if messages %}
+
+                {% for message in messages %}
+                    <div class="alert-danger rounded"
+                         style="padding: 5px">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+            <hr>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                otp code is sended please check your email.
+
+            </div>
+            <form class="mt-4" action="" method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    {{ form.code }}
+                    <!-- <input type="email" class="form-control mb-0" id="exampleInputEmail1" placeholder="ایمیل" autocomplete="off" required> -->
+                </div>
+                <div class="form-group">
+                    <!-- <input type="password" class="form-control mb-0" id="exampleInputPassword2" placeholder="رمز عبور" required> -->
+                </div>
+
+                <div class="sign-info">
+                    <button type="submit" class="btn btn-hover">ورود</button>
+                    <div class="custom-control custom-checkbox d-inline-block">
+                        <input type="checkbox" class="custom-control-input" id="customCheck">
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+{% endblock %}

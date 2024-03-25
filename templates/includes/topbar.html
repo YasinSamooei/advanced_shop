@@ -15,10 +15,10 @@
                     <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">My Account</button>
                     <div class="dropdown-menu dropdown-menu-right">
                     {% if user.is_authenticated %}
-                        <button class="dropdown-item" type="button"><a href="" class="text-dark">Logout</a></button>
+                        <button class="dropdown-item" type="button"><a href="{% url "accounts:logout" %}" class="text-dark">Logout</a></button>
                         <button class="dropdown-item" type="button"><a href="" class="text-dark">Add Address</a></button>
                     {% else %}
-                        <button class="dropdown-item" type="button"><a href="" class="text-dark">Register/Login</a></button>
+                        <button class="dropdown-item" type="button"><a href="{% url "accounts:login" %}" class="text-dark">Login</a></button>
                     {% endif %}
                     </div>
                 </div>

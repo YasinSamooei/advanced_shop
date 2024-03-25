@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+    login
+{% endblock %}
+
+{% block content %}
+
+    <!-- Breadcrumb Start -->
+    <div class="container-fluid">
+        <div class="row px-xl-5">
+            <div class="col-12">
+                <nav class="breadcrumb bg-light mb-30">
+                    <a class="breadcrumb-item text-dark" href="/">Home</a>
+                    <span class="breadcrumb-item active">Login</span>
+                </nav>
+            </div>
+        </div>
+    </div>
+    <!-- Breadcrumb End -->
+
+    <div class="container-fluid">
+        <h2 class="section-title position-relative text-uppercase text-center mx-xl-5 mb-4"><span
+                class="bg-secondary pr-3">Login</span></h2>
+        <div class="px-xl-5">
+            <div class="mb-5">
+                <div class="contact-form bg-light p-30">
+                    <div id="success"></div>
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="control-group">
+                            <label class="form-label" for="signupSimpleLoginEmail">your email</label>
+                            <input type="email" class="form-control form-control-lg text-center" name="username"
+                                   id="signupSimpleLoginEmail" placeholder="email@site.com" aria-label="email@site.com"
+                                   required>
+                            <span class="invalid-feedback">please enter a valid email.</span>
+                            <p class="help-block text-danger"></p>
+                        </div>
+                        <div class="mb-4">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <label class="form-label" for="signupSimpleLoginPassword">password</label>
+
+                            </div>
+
+                            <div class="input-group input-group-merge">
+                                <input type="password" class=" form-control form-control-lg text-center" name="password"
+                                       id="signupSimpleLoginPassword" placeholder="8+ characters required"
+                                       aria-label="8+ characters required" required>
+                                <a id="changePassTarget" class="input-group-append input-group-text"
+                                   href="javascript:;">
+                                    <i id="changePassIcon" class="bi-eye"></i>
+                                </a>
+                            </div>
+
+                            <span class="invalid-feedback">please enter a valid password</span>
+                        </div>
+                        <div>
+                            <input class="btn btn-primary py-2 px-4" type="submit" id="sendMessageButton" value="login">
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+    register
+{% endblock %}
+
+{% block content %}
+
+    <!-- Breadcrumb Start -->
+    <div class="container-fluid">
+        <div class="row px-xl-5">
+            <div class="col-12">
+                <nav class="breadcrumb bg-light mb-30">
+                    <a class="breadcrumb-item text-dark" href="/">Home</a>
+                    <span class="breadcrumb-item active">Register</span>
+                </nav>
+            </div>
+        </div>
+    </div>
+    <!-- Breadcrumb End -->
+
+    <div class="container-fluid">
+        <h2 class="section-title position-relative text-uppercase text-center mx-xl-5 mb-4"><span
+                class="bg-secondary pr-3">Register</span></h2>
+        <div class="px-xl-5">
+            <div class="mb-5">
+                <div class="contact-form bg-light p-30">
+                    <div id="success"></div>
+                    {% for message in messages %}
+                     {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+                         <div class="alert-danger rounded"
+                              style="padding: 5px">
+                             {{ message }}
+                         </div>
+                     {% else %}
+                         <div class="alert-success rounded"
+                              style="padding: 5px">
+                             {{ message }}
+                         </div>
+                     {% endif %}
+                     {% endfor %}
+                    <form method="post" action="{% url 'accounts:sign-up' %}">
+                        {% csrf_token %}
+                         <div class="row">
+                           <div class="col-md-12">
+                              <div class="form-group">
+                                 <label>email</label>
+                                 {{form.email}}
+                              </div>
+                           </div>
+                           <div class="col-md-12">
+                              <div class="form-group">
+                                 <label>password</label>
+                                 {{form.password}}
+                              </div>
+                           </div>
+                        </div>
+
+
+                        <div>
+                            <input class="btn btn-primary py-2 px-4" type="submit" id="sendMessageButton"
+                                   value="register">
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
