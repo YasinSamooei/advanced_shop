@@ -10,3 +10,4 @@ python-decouple==3.8
 
 # debug modules
 django-debug-toolbar==4.2.0
+Faker==24.8.0
