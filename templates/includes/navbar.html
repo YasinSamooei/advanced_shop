@@ -14,15 +14,15 @@
                     {% if category.parent == None %}
                         {% if category.children.all %}
                     <div class="nav-item dropdown dropright">
-                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">{{ category.title }} <i class="fa fa-angle-right float-right mt-1"></i></a>
+                        <a href="{% url 'shop:product-list' %}?category={{ category.id }}" class="nav-link dropdown-toggle" data-toggle="dropdown">{{ category.title }} <i class="fa fa-angle-right float-right mt-1"></i></a>
                         <div class="dropdown-menu position-absolute rounded-0 border-0 m-0">
                             {% for child in category.children.all %}
-                            <a href="" class="dropdown-item">{{ child.title }}</a>
+                            <a href="{% url 'shop:product-list' %}?category={{ child.id }}" class="dropdown-item">{{ child.title }}</a>
                             {% endfor %}
                         </div>
                     </div>
                         {% else %}
-                        <a href="" class="nav-item nav-link">{{ category.title }}</a>
+                        <a href="{% url 'shop:product-list' %}?category={{ category.id }}" class="nav-item nav-link">{{ category.title }}</a>
                         {% endif %}
                     {% endif %}
                     {% endfor %}
@@ -40,9 +40,8 @@
                 </button>
                 <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                     <div class="navbar-nav mr-auto py-0">
-                        <a href="index.html" class="nav-item nav-link active">Home</a>
-                        <a href="{% url 'shop:product-list' %}" class="nav-item nav-link">Products Lits</a>
-                        <a href="detail.html" class="nav-item nav-link">Shop Detail</a>
+                        <a href="/" class="nav-item nav-link {% if request.resolver_match.url_name == 'index' %}active{% endif %}">Home</a>
+                        <a href="{% url 'shop:product-list' %}" class="nav-item nav-link {% if request.resolver_match.url_name == 'product-list' %}active{% endif %}">Products List</a>`
                         <div class="nav-item dropdown">
                             <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Pages <i class="fa fa-angle-down mt-1"></i></a>
                             <div class="dropdown-menu bg-primary rounded-0 border-0 m-0">
@@ -50,7 +49,7 @@
                                 <a href="checkout.html" class="dropdown-item">Checkout</a>
                             </div>
                         </div>
-                        <a href="{% url 'contact:contact' %}" class="nav-item nav-link">Contact</a>
+                        <a href="{% url 'contact:contact' %}" class="nav-item nav-link {% if request.resolver_match.url_name == 'contact' %}active{% endif %}">Contact</a>
                     </div>
                     <div class="navbar-nav ml-auto py-0 d-none d-lg-block">
                         <a href="" class="btn px-0">

@@ -27,20 +27,14 @@ class ShopProductListView(ListView):
     def get_queryset(self):
         queryset = ProductModel.objects.filter(
             status=ProductStatusType.publish.value)
-        filter = self.request.GET.get("filter")
-        if filter:
-            if filter == "latest":
-                queryset = queryset.all().order_by("-created_date")
-            elif filter == "popular":
-                queryset = queryset.all().order_by("-ratings")
+        min_price = self.request.GET.get('min_price')
+        max_price = self.request.GET.get('max_price')
         if search_q := self.request.GET.get("q"):
             queryset = queryset.filter(title__icontains=search_q)
-        if category_id := self.request.GET.get("category_id"):
+        if category_id := self.request.GET.get("category"):
             queryset = queryset.filter(category__id=category_id)
-        if min_price := self.request.GET.get("min_price"):
-            queryset = queryset.filter(price__gte=min_price)
-        if max_price := self.request.GET.get("max_price"):
-            queryset = queryset.filter(price__lte=max_price)
+        if min_price and max_price:
+            queryset = queryset.filter(price__lte=max_price, price__gte=min_price).distinct()
         if order_by := self.request.GET.get("order_by"):
             try:
                 queryset = queryset.order_by(order_by)
