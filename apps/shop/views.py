@@ -4,10 +4,13 @@ from django.views.generic import (
     DetailView,
     View
 )
-from .models import ProductModel, ProductStatusType, ProductCategoryModel, WishlistProductModel
+from .models import ProductModel, ProductStatusType, ProductCategoryModel, WishlistProductModel, ProductComment
 from django.core.exceptions import FieldError
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import JsonResponse
+from django.db.models import Q
+from django.shortcuts import redirect, reverse
+from urllib.parse import unquote
+
+
 # from review.models import ReviewModel, ReviewStatusType
 
 
@@ -24,6 +27,12 @@ class ShopProductListView(ListView):
     def get_queryset(self):
         queryset = ProductModel.objects.filter(
             status=ProductStatusType.publish.value)
+        filter = self.request.GET.get("filter")
+        if filter:
+            if filter == "latest":
+                queryset = queryset.all().order_by("-created_date")
+            elif filter == "popular":
+                queryset = queryset.all().order_by("-ratings")
         if search_q := self.request.GET.get("q"):
             queryset = queryset.filter(title__icontains=search_q)
         if category_id := self.request.GET.get("category_id"):
@@ -48,36 +57,55 @@ class ShopProductListView(ListView):
         return context
 
 
-# class ShopProductDetailView(DetailView):
-#     template_name = "shop/product-detail.html"
-#     queryset = ProductModel.objects.filter(
-#         status=ProductStatusType.publish.value)
-#
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         product = self.get_object()
-#         context["is_wished"] = WishlistProductModel.objects.filter(
-#             user=self.request.user, product__id=product.id).exists() if self.request.user.is_authenticated else False
-#         reviews = ReviewModel.objects.filter(product=product, status=ReviewStatusType.accepted.value)
-#         context["reviews"] = reviews
-#         total_reviews_count = reviews.count()
-#         context["reviews_count"] = {
-#             f"rate_{rate}": reviews.filter(rate=rate).count() for rate in range(1, 6)
-#         }
-#         if total_reviews_count != 0:
-#             context["reviews_avg"] = {
-#                 f"rate_{rate}": round((reviews.filter(rate=rate).count() / total_reviews_count) * 100, 2) for rate in
-#                 range(1, 6)
-#             }
-#         else:
-#             context["reviews_avg"] = {f"rate_{rate}": 0 for rate in range(1, 6)}
-#         return context
-#
-#     def get_object(self, queryset=None):
-#         obj = super().get_object(queryset)
-#         obj.product_images.prefetch_related()
-#         return obj
-#
+class ShopProductDetailView(DetailView):
+    template_name = "shop/product-detail.html"
+    slug_field = "slug"
+    model = ProductModel
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        product = self.get_object()
+        context["is_wished"] = WishlistProductModel.objects.filter(
+            user=self.request.user, product__id=product.id).exists() if self.request.user.is_authenticated else False
+        product_categories = product.category.all()
+
+        suggested_products = ProductModel.objects.filter(
+            Q(category__in=product_categories) &
+            ~Q(id=product.id)  # Exclude the current video from the results
+        ).order_by('?').distinct()[:5]
+        # reviews = ReviewModel.objects.filter(product=product, status=ReviewStatusType.accepted.value)
+        # context["reviews"] = reviews
+        # total_reviews_count = reviews.count()
+        # context["reviews_count"] = {
+        #     f"rate_{rate}": reviews.filter(rate=rate).count() for rate in range(1, 6)
+        # }
+        # if total_reviews_count != 0:
+        #     context["reviews_avg"] = {
+        #         f"rate_{rate}": round((reviews.filter(rate=rate).count() / total_reviews_count) * 100, 2) for rate in
+        #         range(1, 6)
+        #     }
+        # else:
+        #     context["reviews_avg"] = {f"rate_{rate}": 0 for rate in range(1, 6)}
+        context = {
+            "product": product,
+            "suggested_products": suggested_products,
+        }
+        return context
+
+    def post(self, request, slug):
+        user = request.user
+        if not user.is_authenticated:
+            return redirect("account:login")
+        slug = unquote(slug)
+        product = ProductModel.objects.get(slug=slug)
+        body = request.POST.get("body")
+        ProductComment.objects.create(user=user, body=body, product=product)
+        return redirect(reverse("shop:product-detail", kwargs={"slug": slug}))
+    # def get_object(self, queryset=None):
+    #     obj = super().get_object(queryset)
+    #     obj.product_images.prefetch_related()
+    #     return obj
+
 #
 # class AddOrRemoveWishlistView(LoginRequiredMixin, View):
 #

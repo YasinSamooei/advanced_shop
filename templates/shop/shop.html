@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load ratings %}
 {% block title %}
     Products List
 {% endblock %}
@@ -159,9 +160,8 @@
                                             data-toggle="dropdown">Sorting
                                     </button>
                                     <div class="dropdown-menu dropdown-menu-right">
-                                        <a class="dropdown-item" href="#">Latest</a>
-                                        <a class="dropdown-item" href="#">Popularity</a>
-                                        <a class="dropdown-item" href="#">Best Rating</a>
+                                        <a class="dropdown-item" href="?filter=latest">Latest</a>
+                                        <a class="dropdown-item" href="?filter=popular">Popularity</a>
                                     </div>
                                 </div>
                                 <div class="btn-group ml-2">
@@ -195,7 +195,7 @@
                                     <div class="d-flex align-items-center justify-content-center mt-2">
                                         <h5>{{ product.category.first }}</h5>
                                     </div>
-                                    <a class="h6 text-decoration-none text-truncate" href="">{{ product.title }}</a>
+                                    <a class="h6 text-decoration-none text-truncate" href="{% url 'shop:product-detail' slug=product.slug %}">{{ product.title }}</a>
                                     <div class="d-flex align-items-center justify-content-center mt-2">
                                         {% if product.is_discounted %}
                                             <h5>{{ product.get_price }}</h5>
@@ -207,15 +207,14 @@
                                         {% endif %}
                                     </div>
                                     <div class="d-flex align-items-center justify-content-center mb-1">
-                                        <small class="fa fa-star text-primary mr-1"></small>
-                                        <small class="fa fa-star text-primary mr-1"></small>
-                                        <small class="fa fa-star text-primary mr-1"></small>
-                                        <small class="fa fa-star text-primary mr-1"></small>
-                                        <small class="fa fa-star text-primary mr-1"></small>
-                                        <small>(99)</small>
+                                        {% ratings product %}
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                        {% empty %}
+                        <div class="text-danger h1 text-center col-lg-12 col-md-12 col-sm-12 pb-1">
+                                       !!! محتوایی برای نمایش موجود نیست
                         </div>
                     {% endfor %}
                     <div class="col-12">

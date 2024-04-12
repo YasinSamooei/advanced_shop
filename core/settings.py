@@ -24,10 +24,14 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
 
+    # my apps
     "apps.accounts",
     "apps.contact",
     "apps.website",
     "apps.shop",
+
+    # Third party applications
+    "star_ratings",
 ]
 
 MIDDLEWARE = [
@@ -158,3 +162,7 @@ if SHOW_DEBUGGER_TOOLBAR:
 AUTH_USER_MODEL = 'accounts.User'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
+
+# star ratings settings
+STAR_RATINGS_STAR_HEIGHT = 20
+STAR_RATINGS_RERATE = True

@@ -1,7 +1,9 @@
 from django.db import models
 from decimal import Decimal
 from django.core.validators import MaxValueValidator, MinValueValidator
-
+from django.contrib.contenttypes.fields import GenericRelation
+from star_ratings.models import Rating
+from apps.accounts.models import User
 
 class ProductStatusType(models.IntegerChoices):
     publish = 1, ("show")
@@ -39,7 +41,7 @@ class ProductModel(models.Model):
     price = models.DecimalField(default=0, max_digits=10, decimal_places=0)
     discount_percent = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(100)])
 
-    avg_rate = models.FloatField(default=0.0)
+    ratings = GenericRelation(Rating, related_query_name='products')
 
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
@@ -71,6 +73,34 @@ class ProductImageModel(models.Model):
 
     class Meta:
         ordering = ["-created_date"]
+
+
+class Information(models.Model):
+    product = models.ForeignKey(ProductModel, on_delete=models.CASCADE, related_name="informations")
+    text = models.TextField()
+
+    def __str__(self):
+        return self.text[:30]
+
+
+class ProductComment(models.Model):
+    product = models.ForeignKey(
+        ProductModel,
+        on_delete=models.CASCADE,
+        related_name="productcomments",
+    )
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        verbose_name="user",
+        related_name="productcomments",
+    )
+    body = models.TextField()
+    is_active = models.BooleanField(default=False)
+    created = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-created"]
 
 
 class WishlistProductModel(models.Model):
