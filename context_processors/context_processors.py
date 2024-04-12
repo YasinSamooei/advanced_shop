@@ -1,4 +1,4 @@
-from apps.shop.models import ProductCategoryModel, ProductModel
+from apps.shop.models import ProductCategoryModel, ProductModel, ProductStatusType
 
 
 def categories(request):
@@ -7,7 +7,7 @@ def categories(request):
     """
     categories = ProductCategoryModel.objects.all()
 
-    recent_products = ProductModel.objects.all()[:6]
+    recent_products = ProductModel.objects.filter(status=ProductStatusType.publish.value)[:6]
 
     context = {"categories": categories, "recent_products": recent_products}
 
