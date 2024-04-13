@@ -5,6 +5,7 @@ from django.contrib.contenttypes.fields import GenericRelation
 from star_ratings.models import Rating
 from apps.accounts.models import User
 
+
 class ProductStatusType(models.IntegerChoices):
     publish = 1, ("show")
     draft = 2, ("dontshow")
@@ -26,6 +27,13 @@ class ProductCategoryModel(models.Model):
         return self.title
 
 
+class Color(models.Model):
+    title = models.CharField(max_length=10)
+
+    def __str__(self):
+        return self.title
+
+
 # Create your models here.
 class ProductModel(models.Model):
     user = models.ForeignKey("accounts.User", on_delete=models.PROTECT)
@@ -42,6 +50,7 @@ class ProductModel(models.Model):
     discount_percent = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(100)])
 
     ratings = GenericRelation(Rating, related_query_name='products')
+    color = models.ManyToManyField(Color, related_name="products", blank=True, null=True)
 
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
@@ -53,6 +62,11 @@ class ProductModel(models.Model):
         return self.title
 
     def get_price(self):
+        discount_amount = self.price * Decimal(self.discount_percent / 100)
+        discounted_amount = self.price - discount_amount
+        return round(discounted_amount)
+
+    def get_show_price(self):
         discount_amount = self.price * Decimal(self.discount_percent / 100)
         discounted_amount = self.price - discount_amount
         return '{:,}'.format(round(discounted_amount))

@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     "apps.contact",
     "apps.website",
     "apps.shop",
+    "apps.cart",
 
     # Third party applications
     "star_ratings",
@@ -58,6 +59,7 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
                 'context_processors.context_processors.categories',
+                'apps.cart.context_processors.cart_processor',
             ],
         },
     },

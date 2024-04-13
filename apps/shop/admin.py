@@ -1,10 +1,15 @@
 from django.contrib import admin
-from .models import ProductModel, ProductImageModel, ProductCategoryModel, WishlistProductModel, Information
+from .models import ProductModel, ProductImageModel, ProductCategoryModel, WishlistProductModel, Information, Color
 
 
 # Register your models here.
 class InformationAdmin(admin.StackedInline):
     model = Information
+
+
+@admin.register(Color)
+class ColorModelAdmin(admin.ModelAdmin):
+    list_display = ("title",)
 
 
 @admin.register(ProductModel)
