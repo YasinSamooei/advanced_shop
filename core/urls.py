@@ -25,6 +25,7 @@ urlpatterns = [
     path("", include("apps.accounts.urls")),
     path("", include("apps.shop.urls")),
     path("", include("apps.cart.urls")),
+    path("", include("apps.dashboard.urls")),
     path('ratings/', include('star_ratings.urls', namespace='ratings')),
 ]
 if settings.DEBUG:

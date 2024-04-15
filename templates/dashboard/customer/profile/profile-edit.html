@@ -1,0 +1,91 @@
+{% extends 'dashboard/customer/base.html' %}
+{% load static %}
+
+{% block title %}{% block title-meta %}
+    Profile
+{% endblock %}{% endblock %}
+
+{% block main %}
+    <div class="main-panel">
+        <div class="content-wrapper">
+            <div class="page-header">
+                <h3 class="page-title text-primary">
+                    <a class="page-title-icon bg-gradient-primary text-white me-2">
+                        <i class="mdi mdi-face-profile"></i>
+                    </a> <a href="{% url 'dashboard:admin:home' %}" class="text-black">Home</a> <span
+                        class="text-black">/</span> Profile
+
+                </h3>
+
+            </div>
+            <div class="row">
+                <div class="col-12 grid-margin stretch-card">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title">Profile</h4>
+                            <p class="card-description"> Change Image </p>
+                            <form class="forms-sample" action="{% url 'dashboard:customer:profile-image-edit' %}"
+                                  method="post" enctype="multipart/form-data">
+                                {% csrf_token %}
+
+
+                                <div class="form-group">
+                                    <label>File upload</label>
+                                    <div class="my-2">
+                                    <h3 class="d-inline-block">Current Image</h3>
+                                    <img src="{% if request.user.user_profile.image %}{{ request.user.user_profile.image.url }}{% else %}{% static 'panel/images/pic-4.png' %}{% endif %}" width="100px" height="100px" class="rounded-circle d-inline-block">
+                                        </div>
+                                    <div class="input-group col-xs-12">
+                                        <input type="file" class="form-control"
+                                               placeholder="Upload Image" name="image" accept="image/png, image/jpg, image/jpeg">
+                                        <span class="input-group-append">
+                          </span>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-gradient-primary me-2">Submit</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Profile</h4>
+                        <p class="card-description"> Edit Profile </p>
+                        <form class="forms-sample" method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label for="exampleInputName1">First Name</label>
+                                {{ form.first_name }}
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputEmail3">Last Name</label>
+                                {{ form.last_name }}
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputPassword4">Phone Number</label>
+                                {{ form.phone_number }}
+                            </div>
+                            <button type="submit" class="btn btn-gradient-primary me-2">Submit</button>
+                            <a class="btn btn-danger" href="{% url 'dashboard:customer:profile-edit' %}">Cancel</a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <footer class="footer">
+        <div class="container-fluid d-flex justify-content-between">
+            <span class="text-muted d-block text-center text-sm-start d-sm-inline-block">Copyright © bootstrapdash.com 2021</span>
+            <span class="float-none float-sm-end mt-1 mt-sm-0 text-end"> Free <a
+                    href="https://www.bootstrapdash.com/bootstrap-admin-template/" target="_blank">Bootstrap admin template</a> from Bootstrapdash.com</span>
+        </div>
+    </footer>
+    </div>
+    <script>
+
+    </script>
+{% endblock %}

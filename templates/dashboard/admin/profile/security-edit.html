@@ -1,0 +1,62 @@
+{% extends 'dashboard/customer/base.html' %}
+{% load static %}
+
+{% block title %}{% block title-meta %}
+    Security
+{% endblock %}{% endblock %}
+
+{% block main %}
+    <div class="main-panel">
+        <div class="content-wrapper">
+            <div class="page-header">
+                <h3 class="page-title text-primary">
+          <a class="page-title-icon bg-gradient-primary text-white me-2">
+            <i class="mdi mdi-security"></i>
+          </a> <a href="{% url 'dashboard:admin:home' %}" class="text-black">Home</a> <span class="text-black">/</span>  Security
+
+                </h3>
+
+            </div>
+            <div class="row">
+                <div class="col-12 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title">Security</h4>
+                    <p class="card-description"> Change Password </p>
+                    <form class="forms-sample" method="post">
+                        {% csrf_token %}
+                      <div class="form-group">
+                        <label for="exampleInputName1">Current Password</label>
+                        {{form.old_password}}
+                      </div>
+                      <div class="form-group">
+                        <label for="exampleInputEmail3">New Password</label>
+                        {{form.new_password1}}
+                      </div>
+                      <div class="form-group">
+                        <label for="exampleInputPassword4">Repeat New Password</label>
+                          {{form.new_password2}}
+                      </div>
+                      <button type="submit" class="btn btn-gradient-primary me-2">Submit</button>
+                      <a class="btn btn-danger" href="{% url 'dashboard:customer:security-edit' %}">Cancel</a>
+                    </form>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+        </div>
+
+        <footer class="footer">
+            <div class="container-fluid d-flex justify-content-between">
+                <span class="text-muted d-block text-center text-sm-start d-sm-inline-block">Copyright © bootstrapdash.com 2021</span>
+                <span class="float-none float-sm-end mt-1 mt-sm-0 text-end"> Free <a
+                        href="https://www.bootstrapdash.com/bootstrap-admin-template/" target="_blank">Bootstrap admin template</a> from Bootstrapdash.com</span>
+            </div>
+        </footer>
+    </div>
+    <script>
+
+    </script>
+{% endblock %}

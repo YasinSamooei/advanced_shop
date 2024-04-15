@@ -14,7 +14,7 @@
                     <div class="dropdown-menu dropdown-menu-right">
                     {% if user.is_authenticated %}
                         <button class="dropdown-item" type="button"><a href="{% url "accounts:logout" %}" class="text-dark">Logout</a></button>
-                        <button class="dropdown-item" type="button"><a href="" class="text-dark">My Profile</a></button>
+                        <button class="dropdown-item" type="button"><a href="{% url 'dashboard:home' %}" class="text-dark">My Profile</a></button>
                     {% else %}
                         <button class="dropdown-item" type="button"><a href="{% url "accounts:login" %}" class="text-dark">Login</a></button>
                         <button class="dropdown-item" type="button"><a href="{% url "accounts:sign-up" %}" class="text-dark">register</a></button>

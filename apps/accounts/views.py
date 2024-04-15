@@ -1,11 +1,11 @@
 from django.contrib.auth import views as auth_views
-from django.contrib import messages
 from django.views import generic
 from apps.accounts.forms import *
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import login
 from django.shortcuts import redirect, render
 from django.core.cache import cache
 from .otp_service import OTP
+from django.contrib import messages
 
 
 class LoginView(auth_views.LoginView):

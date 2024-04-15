@@ -1,0 +1,140 @@
+{% extends 'dashboard/customer/base.html' %}
+{% load static %}
+
+{% block title %}{% block title-meta %}
+    Home Page
+{% endblock %}{% endblock %}
+
+{% block main %}
+    <div class="main-panel">
+        <div class="content-wrapper">
+            <div class="page-header">
+                <h3 class="page-title">
+          <span class="page-title-icon bg-gradient-primary text-white me-2">
+            <i class="mdi mdi-home"></i>
+          </span> Home Page
+                </h3>
+
+            </div>
+            <div class="row">
+{#                <div class="col-12 grid-margin stretch-card">#}
+{#                    <div class="card">#}
+{#                        <div class="card-body">#}
+{#                            <h4 class="card-title">Search Form</h4>#}
+{#                            <p class="card-description"> Select the time range to search </p>#}
+{#                            <form class="forms-sample">#}
+{#                                <div class="form-group">#}
+{#                                    <label for="exampleInputUsername1">Start Date</label>#}
+{#                                    <input type="datetime-local" class="form-control" id="exampleInputUsername1"#}
+{#                                           placeholder="Start Date" name="start_date"#}
+{#                                           value="{{ request.GET.start_date }}">#}
+{#                                </div>#}
+{#                                <div class="form-group">#}
+{#                                    <label for="exampleInputEmail1">End Date</label>#}
+{#                                    <input type="datetime-local" class="form-control" id="exampleInputEmail1"#}
+{#                                           placeholder="End Date" name="end_date"#}
+{#                                           value="{{ request.GET.end_date }}">#}
+{#                                </div>#}
+{#                                <button type="submit" class="btn btn-gradient-primary me-2">Submit</button>#}
+{#                                <button class="btn btn-light">Cancel</button>#}
+{#                            </form>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+{#                <div class="col-12 grid-margin">#}
+{#                    <div class="card">#}
+{#                        <div class="card-body">#}
+{#                            <h4 class="card-title">Guests List</h4>#}
+{#                            <div class="table-responsive">#}
+{#                                {% if object_list %}#}
+{#                                    <table class="table" id="guest">#}
+{#                                        <thead>#}
+{#                                        <tr>#}
+{#                                            <th> User</th>#}
+{#                                            <th> Guest's Fullname</th>#}
+{#                                            <th> Enter Time</th>#}
+{#                                            <th> Exit Time</th>#}
+{#                                        </tr>#}
+{#                                        </thead>#}
+{#                                        <tbody>#}
+{#                                        {% for guest in object_list %}#}
+{#                                            <tr>#}
+{#                                                <td>#}
+{#                                                    {% if not guest.user.image %}#}
+{#                                                        <img src="{% static 'panel/images/pic-4.png' %}" class="me-2"#}
+{#                                                             alt="image"> {{ guest.user.fullname }}#}
+{#                                                    {% else %}#}
+{#                                                        <img src="{{ guest.user.image.url }}" class="me-2" alt="image">#}
+{#                                                        {{ guest.user.fullname }}#}
+{#                                                    {% endif %}#}
+{#                                                </td>#}
+{#                                                <td>{{ guest.fullname }}</td>#}
+{#                                                <td>{{ guest.enter_time }}</td>#}
+{#                                                {% if guest.exit_time %}#}
+{#                                                    <td>{{ guest.exit_time }}</td>#}
+{#                                                {% else %}#}
+{#                                                    <td>#}
+{#                                                        <a class="btn btn-gradient-danger p-2" style="font-size: 15px;"#}
+{#                                                           onclick="set_exit_time('{{ guest.id }}')">Exit time not#}
+{#                                                            specified</a>#}
+{#                                                    </td>#}
+{#                                                {% endif %}#}
+{#                                            </tr>#}
+{#                                        {% endfor %}#}
+{#                                        </tbody>#}
+{#                                    </table>#}
+{#                                {% else %}#}
+{#                                    <label class="badge badge-gradient-success p-3" style="font-size: 25px;">No results#}
+{#                                        found</label>#}
+{#                                {% endif %}#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+            </div>
+            {% if page_obj.has_other_pages %}
+                <div class="d-flex align-items-center justify-content-center mb-3 pagination">
+
+                    {% if page_obj.has_previous %}
+                        <a href="?page=
+    
+                    {{ page_obj.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}"
+                           class="btn btn-outline-success"><i class="mdi mdi-arrow-left-bold"></i></a>
+                    {% endif %}
+
+                    {% for page in page_obj.paginator.page_range %}
+                        {% if page_obj.number == page %}
+                            <a href="?page={{ page }}" class="btn btn-outline-success active mx-2">{{ page }}</a>
+                        {% elif page > page_obj.number|add:'-3' and page < page_obj.number|add:'3' %}
+                            <a href="?page={{ page }}" class="btn btn-outline-success mx-2">{{ page }}</a>
+                        {% endif %}
+                    {% endfor %}
+
+
+                    {% if page_obj.has_next %}
+                        <a href="?page=
+    
+                    {{ page_obj.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}"
+                           class="btn btn-outline-success mx-2"><i class="mdi mdi-arrow-right-bold "></i></a>
+                    {% endif %}
+
+                </div>
+            {% endif %}
+        </div>
+
+
+        <!-- content-wrapper ends -->
+        <!-- partial:partials/_footer.html -->
+        <footer class="footer">
+            <div class="container-fluid d-flex justify-content-between">
+                <span class="text-muted d-block text-center text-sm-start d-sm-inline-block">Copyright © bootstrapdash.com 2021</span>
+                <span class="float-none float-sm-end mt-1 mt-sm-0 text-end"> Free <a
+                        href="https://www.bootstrapdash.com/bootstrap-admin-template/" target="_blank">Bootstrap admin template</a> from Bootstrapdash.com</span>
+            </div>
+        </footer>
+        <!-- partial -->
+    </div>
+    <script>
+
+    </script>
+{% endblock %}
