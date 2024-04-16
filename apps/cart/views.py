@@ -14,11 +14,11 @@ class SessionAddProductView(View):
         color = request.POST.get("color")
         form = request.POST.get("form")
         if product_id and ProductModel.objects.filter(id=product_id, status=ProductStatusType.publish.value).exists():
-            # product = ProductModel.objects.get(
-            #     id=product_id
-            # )
-            # product.stock -= 1
-            # product.save()
+            product = ProductModel.objects.get(
+                id=product_id
+            )
+            product.stock -= 1
+            product.save()
             cart.add_product(product_id, color)
         if request.user.is_authenticated:
             cart.merge_session_cart_in_db(request.user)
@@ -34,15 +34,14 @@ class SessionRemoveProductView(View):
         cart = CartSession(request.session)
         product_id = request.POST.get("product_id")
         if product_id:
+            item = cart.get_cart_detail(product_id)
+            quantity = item["quantity"]
+            product = ProductModel.objects.get(
+                id=product_id
+            )
+            product.stock += quantity
+            product.save()
             cart.remove_product(product_id)
-            # for item in cart.get_cart_items():
-            #     if item["product_id"] == product_id:
-            #         quantity = item["quantity"]
-            #         product = ProductModel.objects.get(
-            #             id=product_id
-            #         )
-            #         product.stock += quantity
-            #         product.save()
 
         if request.user.is_authenticated:
             cart.merge_session_cart_in_db(request.user)
@@ -56,11 +55,14 @@ class SessionUpdateProductQuantityView(View):
         product_id = request.POST.get("product_id")
         quantity = request.POST.get("quantity")
         if product_id and quantity:
-            # product = ProductModel.objects.get(
-            #     id=product_id
-            # )
-            # product.stock -= int(quantity)-1
-            # product.save()
+            item = cart.get_cart_detail(product_id)
+            quantity1 = item["quantity"]
+            product = ProductModel.objects.get(
+                id=product_id
+            )
+            product.stock += int(quantity1)
+            product.stock -= int(quantity)
+            product.save()
             cart.update_product_quantity(product_id, quantity)
         if request.user.is_authenticated:
             cart.merge_session_cart_in_db(request.user)
