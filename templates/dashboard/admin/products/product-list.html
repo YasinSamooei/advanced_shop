@@ -1,0 +1,221 @@
+{% extends 'dashboard/admin/base.html' %}
+{% load static %}
+
+{% block title %}{% block title-meta %}
+    Products List
+{% endblock %}{% endblock %}
+
+{% block main %}
+    <div class="main-panel">
+        <div class="content-wrapper">
+            <div class="page-header">
+                <h3 class="page-title text-primary">
+                    <a class="page-title-icon bg-gradient-primary text-white me-2">
+                        <i class="mdi mdi-amazon"></i>
+                    </a> <a href="{% url 'dashboard:admin:home' %}" class="text-black">Home</a> <span
+                        class="text-black">/ Products /</span> Products List
+
+                </h3>
+
+            </div>
+            <div class="row">
+                <div class="col-lg-12 grid-margin stretch-card">
+
+                 <a class="btn btn-primary" href="{% url 'dashboard:admin:product-create' %}">create product</a>
+                </div>
+            <div class="col-lg-12 grid-margin stretch-card">
+             <div class="card">
+              <div class="card-body">
+                <div class="container">
+            <form class="row">
+{% csrf_token %}
+                <!-- Input Card -->
+                <div class="col-md-3 my-1">
+                    <input type="text" class="form-control form-control-sm" placeholder="search product" name="q"
+                        id="search-query-filter">
+
+                </div>
+                <!-- End Input Card -->
+                <div class="col-md-3 my-1">
+                    <select class="form-select form-select-sm" name="category_id" id="category-id-filter">
+                        <option value="" selected>category</option>
+                        {% for category in categories %}
+                        <option value="{{category.id}}">{{category.title}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-3 my-1">
+                    <select class="form-select form-select-sm" id="order-by-filter">
+                        <option value="" selected>Show</option>
+                        <option value="-created_date">new</option>
+                        <option value="created_date">oldest</option>
+                        <option value="-price">max price</option>
+                        <option value="price">min price</option>
+                    </select>
+                </div>
+
+                <div class="col-md-2 my-1">
+                    <select class="form-select form-select-sm" id="page-size-filter">
+                        <option value="" selected>number</option>
+                        <option value="5">5</option>
+                        <option value="10">10</option>
+                        <option value="20">20</option>
+                        <option value="30">30</option>
+                        <option value="50">50</option>
+                    </select>
+                </div>
+
+                <div class="col-md-1 ">
+                    <button type="submit" class="btn btn-sm btn-primary btn-search"><i class="mdi mdi-search-web"></i></button>
+                </div>
+            </form>
+
+        </div>
+              </div>
+             </div>
+            </div>
+                <div class="col-lg-12 col-sm-4 grid-margin stretch-card">
+
+
+                    <div class="card">
+
+                        <div class="card-body ">
+<div class="row d-flex ">
+                            <h4 class="card-title">Products List</h4>
+                            <p class="card-description"> Number of products : <code
+                                    class="text-danger h5">{{ total_items }}</code>
+                            </p>
+                            <table class="table table-hover">
+                                <thead>
+                                <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">product name</th>
+                                    <th scope="col">product image</th>
+                            <th >category</th>
+                            <th >price</th>
+                            <th scope="col">number</th>
+                            <th scope="col">status</th>
+                            <th scope="col">discount</th>
+                            <th scope="col">operation</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for object in object_list %}
+                                <tr>
+                                    <td>{{object.id}}</td>
+                                    <td>{{object.title}}</td>
+                                <td><img src="{{ object.image.url }}" class="rounded-circle" width="60" height="60" alt="product image"></td>
+                                    <td class="text-danger"> {% for category in object.category.all %} {{category.title}}
+                                {% if not forloop.last %},{% endif %} {% endfor %}</td>
+                                 <td>${{object.get_row_price}}</td>
+                            <td>{{object.stock}}</td>
+                                    <td>{% if object.is_published %}<span class="badge badge-success">published</span>
+                                {% else %}
+                                <span class="badge badge-danger">save</span> {% endif %}</td>
+                                <td>%{{ object.discount_percent}}</td>
+                            <td>
+                                <a class="btn btn-primary btn-sm"
+                                    href="{% url 'dashboard:admin:product-edit' pk=object.pk %}"><i class="mdi mdi-pen"></i></a>
+
+                                {% if object.is_published %}
+                                <a class="btn" target="_blank"
+                                    href="{% url 'shop:product-detail' slug=object.slug %}"><i class="mdi mdi-eye"></i></a>
+                                    {% else %}
+                                    <a class="btn" target="_blank">
+                                    <i class="mdi mdi-eye-off text-danger"></i>
+                                    </a>
+
+                                {% endif %}
+                            </td>
+                                </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                 <div class="col-12">
+                        <nav>
+                            {% if page_obj.has_other_pages %}
+                                <ul class="pagination justify-content-center">
+                                    {% if page_obj.has_previous %}
+                                        <li class="page-item">
+                                            <button class="page-link"
+                                                    onclick="changePage(`{{ page_obj.previous_page_number }}`)">Previous
+                                            </button>
+                                        </li>
+                                    {% endif %}
+
+                                    {% for i in page_obj.paginator.page_range %}
+                                        {% if page_obj.number == i %}
+                                            <li class="page-item active"><a class="page-link">{{ i }}</a></li>
+                                        {% elif i > page_obj.number|add:'-3' and i < page_obj.number|add:'3' %}
+                                            <li class="page-item">
+                                                <button class="page-link"
+                                                        onclick="changePage(`{{ i }}`)">{{ i }}</button>
+                                            </li>
+
+                                        {% endif %}
+                                    {% endfor %}
+                                    {% if page_obj.has_next %}
+                                        <li class="page-item">
+                                            <button class="page-link"
+                                                    onclick="changePage(`{{ page_obj.next_page_number }}`)">Next
+                                            </button>
+                                        </li>
+                                    {% endif %}
+                                </ul>
+                            {% endif %}
+                        </nav>
+                    </div>
+
+            </div>
+
+        </div>
+
+        <footer class="footer">
+            <div class="container-fluid d-flex justify-content-between">
+                <span class="text-muted d-block text-center text-sm-start d-sm-inline-block">Copyright © bootstrapdash.com 2021</span>
+                <span class="float-none float-sm-end mt-1 mt-sm-0 text-end"> Free <a
+                        href="https://www.bootstrapdash.com/bootstrap-admin-template/" target="_blank">Bootstrap admin template</a> from Bootstrapdash.com</span>
+            </div>
+        </footer>
+    </div>
+    {% block extra_js %}
+        <script>
+            $(document).ready(function () {
+                let current_url_params = new URLSearchParams(window.location.search)
+                $("#page-size-filter").val(current_url_params.get("page_size") || "")
+                $("#order-by-filter").val(current_url_params.get("order_by") || "")
+                $("#search-query-filter").val(current_url_params.get("q") || "")
+                $("#min-price-filter").val(current_url_params.get("min_price") || "")
+                $("#max-price-filter").val(current_url_params.get("max_price") || "")
+                $("#category-id-filter").val(current_url_params.get("category") || "")
+
+            });
+            $('#page-size-filter').change(function () {
+                let current_url_params = new URLSearchParams(window.location.search)
+                var selectedOption = $(this).val();
+                current_url_params.set("page_size", selectedOption)
+                let new_url = window.location.pathname + "?" + current_url_params.toString()
+                window.location.href = new_url
+            });
+            $('#order-by-filter').change(function () {
+                let current_url_params = new URLSearchParams(window.location.search)
+                var selectedOption = $(this).val();
+                current_url_params.set("order_by", selectedOption)
+                let new_url = window.location.pathname + "?" + current_url_params.toString()
+                window.location.href = new_url
+            });
+
+            function changePage(page_number) {
+                let current_url_params = new URLSearchParams(window.location.search)
+                current_url_params.set("page", page_number)
+                let new_url = window.location.pathname + "?" + current_url_params.toString()
+                window.location.href = new_url
+
+            }
+        </script>
+    {% endblock extra_js %}
+{% endblock %}

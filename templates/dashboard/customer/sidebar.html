@@ -2,7 +2,7 @@
 <nav class="sidebar sidebar-offcanvas" id="sidebar">
     <ul class="nav">
       <li class="nav-item nav-profile">
-        <a href="{% url 'dashboard:admin:home' %}" class="nav-link">
+        <a href="{% url 'dashboard:customer:home' %}" class="nav-link">
           <div class="nav-profile-image">
             {% if request.user.user_profile.image %}
             <img src="{{request.user.user_profile.image.url}}" alt="profile">

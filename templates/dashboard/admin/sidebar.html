@@ -1,35 +1,53 @@
 {% load static %}
 <nav class="sidebar sidebar-offcanvas" id="sidebar">
     <ul class="nav">
-      <li class="nav-item nav-profile">
-        <a href="{% url 'dashboard:admin:home' %}" class="nav-link">
-          <div class="nav-profile-image">
-            {% if request.user.user_profile.image %}
-            <img src="{{request.user.user_profile.image.url}}" alt="profile">
-            {% else %}
-            <img src="{% static 'panel/images/pic-4.png' %}" alt="profile">
-            {% endif %}
-            <span class="login-status online"></span>
-            <!--change to offline or busy as needed-->
-          </div>
-          <div class="nav-profile-text d-flex flex-column">
-            <span class="font-weight-bold mb-2">{{request.user.user_profile.get_fullname}}</span>
-{#            <span class="text-secondary text-small">{{request.user.dormitory}}</span>#}
-          </div>
-          <i class="mdi mdi-bookmark-check text-success nav-profile-badge"></i>
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="{% url 'dashboard:admin:security-edit' %}">
-          <span class="menu-title">Security</span>
-          <i class="mdi mdi-security menu-icon"></i>
-        </a>
-      </li>
-    <li class="nav-item">
-        <a class="nav-link" href="{% url 'dashboard:admin:profile-edit' %}">
-          <span class="menu-title">Profile</span>
-          <i class="mdi mdi-face-profile menu-icon"></i>
-        </a>
-      </li>
+        <li class="nav-item nav-profile">
+            <a href="{% url 'dashboard:admin:home' %}" class="nav-link">
+                <div class="nav-profile-image">
+                    {% if request.user.user_profile.image %}
+                        <img src="{{ request.user.user_profile.image.url }}" alt="profile">
+                    {% else %}
+                        <img src="{% static 'panel/images/pic-4.png' %}" alt="profile">
+                    {% endif %}
+                    <span class="login-status online"></span>
+                    <!--change to offline or busy as needed-->
+                </div>
+                <div class="nav-profile-text d-flex flex-column">
+                    <span class="font-weight-bold mb-2">{{ request.user.user_profile.get_fullname }}</span>
+                    {#            <span class="text-secondary text-small">{{request.user.dormitory}}</span>#}
+                </div>
+                <i class="mdi mdi-bookmark-check text-success nav-profile-badge"></i>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'dashboard:admin:security-edit' %}">
+                <span class="menu-title">Security</span>
+                <i class="mdi mdi-security menu-icon"></i>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'dashboard:admin:profile-edit' %}">
+                <span class="menu-title">Profile</span>
+                <i class="mdi mdi-face-profile menu-icon"></i>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link collapsed" data-bs-toggle="collapse" href="#ui-basic" aria-expanded="false"
+               aria-controls="ui-basic">
+                <span class="menu-title">Products</span>
+                <i class="menu-arrow"></i>
+                <i class="mdi mdi-amazon menu-icon"></i>
+            </a>
+            <div class="collapse" id="ui-basic" style="">
+                <ul class="nav flex-column sub-menu">
+                    <li class="nav-item"><a class="nav-link" href="{% url 'dashboard:admin:product-list' %}">Products List</a>
+
+                    </li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'dashboard:admin:product-create' %}">Products Create</a>
+                    </li>
+
+                </ul>
+            </div>
+        </li>
     </ul>
-  </nav>
+</nav>

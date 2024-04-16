@@ -59,7 +59,7 @@ class AdminProductCreateView(LoginRequiredMixin, HasAdminAccessPermission, Succe
     template_name = "dashboard/admin/products/product-create.html"
     queryset = ProductModel.objects.all()
     form_class = ProductForm
-    success_message = "ایجاد محصول با موفقیت انجام شد"
+    success_message = "product is created!"
 
     def form_valid(self, form):
         form.instance.user = self.request.user
@@ -94,7 +94,7 @@ class AdminProductDeleteView(LoginRequiredMixin, HasAdminAccessPermission, Succe
     template_name = "dashboard/admin/products/product-delete.html"
     queryset = ProductModel.objects.all()
     success_url = reverse_lazy("dashboard:admin:product-list")
-    success_message = "حذف محصول با موفقیت انجام شد"
+    success_message = "product is deleted!!"
 
 
 class AdminProductAddImageView(LoginRequiredMixin, HasAdminAccessPermission, CreateView):
@@ -112,19 +112,19 @@ class AdminProductAddImageView(LoginRequiredMixin, HasAdminAccessPermission, Cre
             pk=self.kwargs.get('pk'))
         # handle successful form submission
         messages.success(
-            self.request, 'تصویر مورد نظر با موفقیت ثبت شد')
+            self.request, 'image is saved')
         return super().form_valid(form)
 
     def form_invalid(self, form):
         # handle unsuccessful form submission
         messages.error(
-            self.request, 'اشکالی در ارسال تصویر رخ داد لطفا مجدد امتحان نمایید')
+            self.request, 'image is not upload , please try again.')
         return redirect(reverse_lazy('dashboard:admin:product-edit', kwargs={'pk': self.kwargs.get('pk')}))
 
 
 class AdminProductRemoveImageView(LoginRequiredMixin, HasAdminAccessPermission, SuccessMessageMixin, DeleteView):
     http_method_names = ["post"]
-    success_message = "تصویر مورد نظر با موفقیت حذف شد"
+    success_message = "image is deleted."
 
     def get_queryset(self):
         return ProductImageModel.objects.filter(product__id=self.kwargs.get('pk'))
@@ -137,5 +137,5 @@ class AdminProductRemoveImageView(LoginRequiredMixin, HasAdminAccessPermission, 
 
     def form_invalid(self, form):
         messages.error(
-            self.request, 'اشکالی در حذف تصویر رخ داد لطفا مجدد امتحان نمایید')
+            self.request, 'image is not deleted , please try again.')
         return redirect(reverse_lazy('dashboard:admin:product-edit', kwargs={'pk': self.kwargs.get('pk')}))

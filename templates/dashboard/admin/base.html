@@ -19,6 +19,8 @@
     <!-- End layout styles -->
     <link rel="shortcut icon" href="{% static 'panel/images/favicon.ico' %}" />
       <link rel="stylesheet" href="{% static 'toastify/toastify.css' %}">
+      {% block extra_css %}
+      {% endblock %}
   </head>
   <body>
     <div class="container-scroller">
@@ -206,6 +208,10 @@
     <!-- End custom js for this page -->
     <script src="{% static 'panel/js/jquery-3.4.1.min.js' %}"></script>
     <script src="{% static 'toastify/toastify.js' %}"></script>
+    {% block extra_js %}
+    {% endblock %}
+{% block extra_js_no_compress %}
+        {% endblock %}
   {% include 'messages.html' %}
   </body>
 </html>
