@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     "apps.shop",
     "apps.cart",
     "apps.dashboard",
+    "apps.order",
 
     # Third party applications
     "star_ratings",
