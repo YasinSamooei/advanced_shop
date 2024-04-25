@@ -1,0 +1,181 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+    Contact
+{% endblock %}
+
+{% block content %}
+    <!-- Breadcrumb Start -->
+    <div class="container-fluid">
+        <div class="row px-xl-5">
+            <div class="col-12">
+                <nav class="breadcrumb bg-light mb-30">
+                    <a class="breadcrumb-item text-dark" href="/static">Home</a>
+                    <a class="breadcrumb-item text-dark" href="{% url 'cart:cart-summary' %}">cart</a>
+                    <span class="breadcrumb-item active">checkout</span>
+                </nav>
+            </div>
+        </div>
+    </div>
+    <!-- Breadcrumb End -->
+    <!-- Checkout Start -->
+    <div class="container-fluid">
+        <div class="row px-xl-5">
+            <div class="col-lg-8">
+                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Billing Address</span>
+                </h5>
+                <div class="bg-light p-30 mb-5">
+                    <div class="row">
+                        <div class="col-md-12 form-group">
+                            <a class="btn btn-outline-success" href="{% url 'dashboard:customer:address-list' %}">Addresses
+                                management</a>
+
+                        </div>
+                        <div class="col-md-12">
+
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="shipto">
+                                <label class="custom-control-label" for="shipto" data-toggle="collapse"
+                                       data-target="#shipping-address">See all Addresses</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="collapse mb-5" id="shipping-address">
+                    <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Shipping Address</span>
+                    </h5>
+                    <form action="." method="post">
+                        {% csrf_token %}
+                        <div class="bg-light p-30">
+                            {% for address in addresses %}
+                                <div class="checkbox-row"></div>
+                                <input type="radio" name="address_id" value="{{ address.id }}" required>
+                                <div class="row">
+                                    <div class="col-md-4 form-group">
+                                        <label class="text-danger">State:</label> {{ address.state }}
+
+                                    </div>
+                                    <div class="col-md-4 form-group">
+                                        <label class="text-danger">city:</label> {{ address.city }}
+
+                                    </div>
+                                    <div class="col-md-4 form-group">
+                                        <label class="text-danger">zip_code:</label> {{ address.zip_code }}
+                                    </div>
+                                    <div class="col-md-12 form-group">
+                                        <label class="text-danger">address:</label> {{ address.address }}
+
+                                    </div>
+                                </div>
+                                <hr>
+                            {% endfor %}
+                        </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Order Total</span>
+                </h5>
+                <div class="bg-light p-30 mb-5">
+                    <div class="border-bottom">
+                        <div class="input-group my-2">
+                            <input type="text" class="form-control p-4" placeholder="Coupon Code" name="coupon" id="coupon-input">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" onclick="validateCoupon()">Apply Coupon</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="border-bottom my-2">
+                        <div class="d-flex justify-content-between mb-3">
+                            <h6>Tax</h6>
+                            <h6>9%</h6>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <h6 class="font-weight-medium">Total Price With Tax</h6>
+                            <h6 class="font-weight-medium" id="total-tax">${{ total_tax }}</h6>
+                        </div>
+                    </div>
+                    <div class="pt-2">
+                        <div class="d-flex justify-content-between mt-2">
+                            <h5>Total</h5>
+                            <h5 id="total-price">${{ total_price }}</h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="mb-5">
+                    <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Payment</span>
+                    </h5>
+                    <div class="bg-light p-30">
+                        <div class="form-group">
+                            <div class="custom-control custom-radio">
+                                <input type="radio" class="custom-control-input" name="payment" id="paypal">
+                                <label class="custom-control-label" for="paypal">Paypal</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="custom-control custom-radio">
+                                <input type="radio" class="custom-control-input" name="payment" id="directcheck">
+                                <label class="custom-control-label" for="directcheck">Direct Check</label>
+                            </div>
+                        </div>
+                        <button class="btn btn-block btn-primary font-weight-bold py-3">Place Order</button>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Checkout End -->
+
+
+    <!-- Back to Top -->
+    <a href="#" class="btn btn-primary back-to-top"><i class="fa fa-angle-double-up"></i></a>
+    {% block extra_js %}
+<script>
+    function applyDiscount(total_price,total_tax){
+        $("#total-price").html(total_price)
+        $("#total-tax").html(total_tax)
+        formatPriceInToman(document.getElementById("total-price"))
+        formatPriceInToman(document.getElementById("total-tax"))
+    }
+
+    function validateCoupon(){
+        $.ajax({
+            url: "{%  url 'order:validate-coupon' %}",
+            method: 'POST',
+            data: {
+                code: $('#coupon-input').val(),
+                csrfmiddlewaretoken: '{{ csrf_token }}'
+
+            },
+            success: function (response) {
+                console.log("success",response);
+                Toastify({
+                    text:response.message,
+                    className: `info`,
+                    style: {
+                      background: "blue",
+                    }
+                  }).showToast();
+                  applyDiscount(response.total_price,response.total_tax)
+                // do something with the response data
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log(errorThrown);
+                Toastify({
+                    text:jqXHR.responseJSON.message,
+                    className: `error`,
+                    style: {
+                      background: "red",
+                    }
+                  }).showToast();
+
+                // handle the error case
+            }
+        });
+    }
+
+</script>
+
+{% endblock %}
+{% endblock %}

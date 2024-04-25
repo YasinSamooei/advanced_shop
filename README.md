@@ -19,6 +19,9 @@
 - integration with payment gateway
 - order management
 
+# dashboard overview
+<div align="center" ><a href="https://github.com/YasinSamooei"><img loading="lazy" style="width:700px" src="./panel.jpg"></a></div>
+
 # technologies
 - django
 - postgres sql

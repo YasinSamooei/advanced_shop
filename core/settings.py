@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     "apps.cart",
     "apps.dashboard",
     "apps.order",
+    "apps.payment",
 
     # Third party applications
     "star_ratings",
@@ -170,3 +171,7 @@ LOGOUT_REDIRECT_URL = '/'
 # star ratings settings
 STAR_RATINGS_STAR_HEIGHT = 20
 STAR_RATINGS_RERATE = True
+
+# payment gateway settings
+MERCHANT_ID = config("MERCHANT_ID", default="4ced0a1e-4ad8-4309-9668-3ea3ae8e8897")
+SANDBOX_MODE = config("SANDBOX_MODE", cast=bool, default=True)

@@ -45,7 +45,7 @@ class OrderModel(models.Model):
     city = models.CharField(max_length=50)
     zip_code = models.CharField(max_length=50)
 
-    # payment = models.ForeignKey('payment.PaymentModel', on_delete=models.SET_NULL, null=True, blank=True)
+    payment = models.ForeignKey('payment.PaymentModel', on_delete=models.SET_NULL, null=True, blank=True)
 
     total_price = models.DecimalField(default=0, max_digits=10, decimal_places=0)
 

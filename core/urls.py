@@ -12,6 +12,7 @@ urlpatterns = [
     path("", include("apps.cart.urls")),
     path("", include("apps.dashboard.urls")),
     path("", include("apps.order.urls")),
+    path("", include("apps.payment.urls")),
     path('ratings/', include('star_ratings.urls', namespace='ratings')),
 ]
 if settings.DEBUG:

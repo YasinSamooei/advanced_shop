@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+    Shoping Complete
+{% endblock %}
+
+{% block content %}
+    <!-- Breadcrumb Start -->
+    <div class="container-fluid">
+        <div class="row px-xl-5">
+            <div class="col-12">
+                <nav class="breadcrumb bg-light mb-30">
+                    <a class="breadcrumb-item text-dark" href="/static">Home</a>
+                    <a class="breadcrumb-item text-dark" href="{% url 'cart:cart-summary' %}">cart</a>
+                    <span class="breadcrumb-item active">Shoping Complete</span>
+                </nav>
+            </div>
+        </div>
+    </div>
+    <!-- Breadcrumb End -->
+    <!-- Checkout Start -->
+    <div class="container-fluid">
+        <div class="row px-xl-5">
+            <div class="col-12">
+                <h1 class="btn btn-success btn-lg"><span class="p-4 text-black h1">Your Shoping Is Completed!</span>
+                </h1>
+        </div>
+    </div>
+    <!-- Checkout End -->
+
+
+    <!-- Back to Top -->
+    <a href="#" class="btn btn-primary back-to-top"><i class="fa fa-angle-double-up"></i></a>
+{% endblock %}
