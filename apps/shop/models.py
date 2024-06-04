@@ -4,6 +4,7 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from django.contrib.contenttypes.fields import GenericRelation
 from star_ratings.models import Rating
 from apps.accounts.models import User
+from django.urls import reverse
 
 
 class ProductStatusType(models.IntegerChoices):
@@ -80,6 +81,9 @@ class ProductModel(models.Model):
 
     def is_published(self):
         return self.status == ProductStatusType.publish.value
+
+    def get_absolute_url(self):
+        return reverse('shop:product-detail', args=[str(self.slug)])
 
 
 class ProductImageModel(models.Model):

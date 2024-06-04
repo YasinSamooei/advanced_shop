@@ -2,7 +2,12 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from django.contrib.sitemaps.views import sitemap
+from apps.shop.sitemaps import ProductSitemap
 
+sitemaps = {
+    "products": ProductSitemap,
+}
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include("apps.contact.urls")),
@@ -14,6 +19,8 @@ urlpatterns = [
     path("", include("apps.order.urls")),
     path("", include("apps.payment.urls")),
     path('ratings/', include('star_ratings.urls', namespace='ratings')),
+    path("sitemap.xml", sitemap, {"sitemaps": sitemaps})
+
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL,
