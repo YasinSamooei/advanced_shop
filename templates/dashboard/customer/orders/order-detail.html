@@ -1,0 +1,115 @@
+{% extends 'dashboard/customer/base.html' %}
+{% load static %}
+
+{% block title %}{% block title-meta %}
+    OrderDetail
+{% endblock %}{% endblock %}
+
+{% block main %}
+<div class="main-panel">
+  <div class="content-wrapper">
+<div class="page-header">
+  <h3 class="page-title text-primary">
+<a class="page-title-icon bg-gradient-primary text-white me-2">
+<i class="mdi mdi-security"></i>
+</a> <a href="{% url 'dashboard:customer:home' %}" class="text-black">Home</a> <span class="text-black">/</span>  OrderDetail
+
+  </h3>
+</div>
+<div class="card">
+    <!-- Header -->
+    <div class="card-header border-bottom">
+      <div class="d-flex justify-content-between align-items-center">
+        <h5 class="">number {{object.id}}</h5>
+        {% if object.is_successful %}
+        <a class="btn btn-primary" href="{% url 'dashboard:customer:order-invoice' pk=object.pk %}" target="_blank">see invoice</a>
+        {% endif %}
+        
+      </div>
+    </div>
+    <!-- End Header -->
+
+    <!-- Body -->
+    <div class="card-body">
+
+      <div class="row">
+        <!-- Table -->
+        <div class="table-responsive">
+          <table class="table">
+            <thead class="thead-light">
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">image</th>
+                <th scope="col">product id</th>
+                <th scope="col">product name</th>
+                <th scope="col">number</th>
+                <th scope="col">price</th>
+              </tr>
+            </thead>
+            <tbody>
+                {% for order_item in object.order_items.all %}
+              <tr>
+                <th scope="row">{{forloop.counter}}</th>
+                <td>
+                  <span class="avatar ">
+                    <img class="avatar-img" src="{{order_item.product.image.url}}" alt="Image Description">
+                  </span>
+                </td>
+                <td>{{order_item.product.pk}}</td>
+                <td>{{order_item.product.title}}</td>
+                <td>{{order_item.quantity}}</td>
+                <td class="formatted-price">{{order_item.price}}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <!-- End Table -->
+
+      </div>
+      <!-- End Row -->
+
+
+    </div>
+    <div class="card-footer row pt-5 mt-5">
+      <form>
+        <div class="row mb-3 align-items-center">
+          <dt class="col-md-3">customer:</dt>
+          <dl class="col-md-3">{{object.user.user_profile.get_fullname}}</dl>
+          <dt class="col-md-3">status:</dt>
+          <dl class="col-md-3 ">{{object.get_status.label}}</dl>
+        </div>
+        <div class="row mb-3">
+          <dt class="col-md-3">order time:</dt>
+          <dl class="col-md-3">{{object.created_date|date:"Y-m-d h:i"}}</dl>
+          <dt class="col-md-3">total price</dt>
+          <dl class="col-md-3 formatted-price">{{object.total_price}}</dl>
+ 
+        </div>
+        {% if object.coupon %}
+        <div class="row mb-3">
+          <dt class="col-md-3">discount</dt>
+          <dl class="col-md-3">{{object.coupon.discount_percent}}%</dl>
+          <dt class="col-md-3">price with discount</dt>
+          <dl class="col-md-3 formatted-price">{{object.get_price}}</dl>
+        </div>
+        {% endif %}
+        <!-- End Row -->
+        <div class="row mb-3">
+          <dt class="col-md-3"> address:</dt>
+          <dl class="col-md-3">{{object.get_full_address}}</dl>
+          <dt class="col-md-3"> zip code :</dt>
+          <dl class="col-md-3">{{object.zip_code}}</dl>
+        </div>
+        <div class=" d-flex pt-5 justify-content-end">
+          <a class="btn btn-secondary ms-3" href="{% url 'dashboard:customer:order-list' %}">return</a>
+
+        </div>
+      </form>
+    </div>
+    <!-- End Body -->
+  </div>
+  <!-- End Card -->
+  </div>
+  </div>
+{% endblock %}

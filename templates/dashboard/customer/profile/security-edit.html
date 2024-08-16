@@ -12,7 +12,7 @@
                 <h3 class="page-title text-primary">
           <a class="page-title-icon bg-gradient-primary text-white me-2">
             <i class="mdi mdi-security"></i>
-          </a> <a href="{% url 'dashboard:admin:home' %}" class="text-black">Home</a> <span class="text-black">/</span>  Security
+          </a> <a href="{% url 'dashboard:customer:home' %}" class="text-black">Home</a> <span class="text-black">/</span>  Security
 
                 </h3>
 
@@ -38,7 +38,7 @@
                           {{form.new_password2}}
                       </div>
                       <button type="submit" class="btn btn-gradient-primary me-2">Submit</button>
-                      <a class="btn btn-danger" href="{% url 'dashboard:admin:security-edit' %}">Cancel</a>
+                      <a class="btn btn-danger" href="{% url 'dashboard:customer:security-edit' %}">Cancel</a>
                     </form>
                   </div>
                 </div>

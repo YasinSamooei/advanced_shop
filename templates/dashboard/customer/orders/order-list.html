@@ -1,0 +1,252 @@
+{% extends 'dashboard/customer/base.html' %}
+{% load static %}
+
+{% block title %}{% block title-meta %}
+    Profile
+{% endblock %}{% endblock %}
+
+{% block main %}
+<div class="main-panel">
+  <div class="content-wrapper">
+<div class="page-header">
+  <h3 class="page-title text-primary">
+<a class="page-title-icon bg-gradient-primary text-white me-2">
+<i class="mdi mdi-security"></i>
+</a> <a href="{% url 'dashboard:customer:home' %}" class="text-black">Home</a> <span class="text-black">/</span>  OrderDetail
+
+  </h3>
+</div>
+
+<!-- Card -->
+<div class="card">
+    <!-- Header -->
+    <div class="card-header border-bottom">
+        <form action="." class="row">
+
+            <!-- Input Card -->
+            <div class="col-md-3 py-1">
+                <input type="text" class="form-control form-control-sm" placeholder="search by id:" name="q"
+                    id="search-query-filter">
+
+            </div>
+            <div class="col-md-3 py-1">
+                <select class="form-select form-select-sm" id="status-type-filter" name="status">
+                    <option value="" selected>status</option>
+                    {% for status_type in status_types %}
+                    <option value="{{status_type.0}}">{{status_type.1}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="col-md-3 py-1">
+                <select class="form-select form-select-sm" id="order-by-filter">
+                    <option value="" selected>ordering</option>
+                    <option value="-created_date">newest</option>
+                    <option value="created_date">oldest</option>
+                </select>
+            </div>
+
+            <div class="col-md-2 py-1">
+                <select class="form-select form-select-sm" id="page-size-filter">
+                    <option value="" selected>number</option>
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="20">20</option>
+                    <option value="30">30</option>
+                    <option value="50">50</option>
+                </select>
+            </div>
+
+            <div class="col-md-1 py-1">
+                <button type="submit" class="btn btn-sm btn-icon btn-primary">search</button>
+            </div>
+        </form>
+    </div>
+    <!-- End Header -->
+
+    <!-- Body -->
+    <div class="card-body">
+
+        <!-- Tab Content -->
+        <div class="tab-content" id="accountOrdersTabContent">
+            <div class="tab-pane fade show active" id="accountOrdersOne" role="tabpanel"
+                aria-labelledby="accountOrdersOne-tab">
+                <!-- Select Group -->
+                <div class="d-sm-flex align-items-sm-center mb-5">
+                    <div class="mb-2 mb-sm-0 me-3">
+                        <span><strong class="text-dark">order: {{ total_items}} </strong></span>
+                    </div>
+
+                    <!-- Select -->
+                    <!-- <div class="tom-select-custom">
+                        <select class="js-select form-select form-select-sm">
+                            <option value="last 30 days">30 روز گذشته</option>
+                            <option value="past 6 months" selected>6 ماه گذشته</option>
+                            <option value="2019">2019</option>
+                        </select>
+                    </div> -->
+                    <!-- End Select -->
+                </div>
+                <!-- End Select Group -->
+
+                <ul class="list-unstyled mb-5">
+                    <!-- Card -->
+                    {% for object in object_list %}
+                    <li class="card card-bordered shadow-none mb-3">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-6 col-md mb-3 mb-md-0">
+                                    <small class="card-subtitle mb-0">order price</small>
+                                    <small class="text-dark fw-semibold formatted-price">{{object.get_price}}</small>
+                                </div>
+                                <!-- End Col -->
+
+                                <div class="col-6 col-md mb-3 mb-md-0">
+                                    <small class="card-subtitle mb-0">status: </small>
+                                    <small class="text-dark fw-semibold">{{object.get_status.label}}</small>
+                                </div>
+                                <!-- End Col -->
+
+                                <div class="col-6 col-md">
+                                    <small class="card-subtitle mb-0">order id: </small>
+                                    <small class="text-dark fw-semibold">{{object.id}}</small>
+                                </div>
+                                <!-- End Col -->
+
+                                <div class="col-6 col-md">
+                                    <small class="card-subtitle mb-0">order time:</small>
+                                    <small class="text-dark fw-semibold">
+                                        {{object.created_date|date:"Y-m-d h:i"}}
+                                    </small>
+                                </div>
+                                <!-- End Col -->
+                            </div>
+                            <!-- End Row -->
+
+                            <hr>
+
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="row gx-2">
+                                        {% for order_item in object.order_items.all|slice:":4" %}
+                                        <div class="col">
+                                            <img class="img-fluid" style="width:100px; height:100px"
+                                                src="{{order_item.product.image.url}}" alt="Image Description">
+                                        </div>
+                                        {% endfor %}
+
+                                    </div>
+                                    <!-- End Row -->
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="d-grid gap-2">
+                                        {% if object.is_successful %}
+                                        <a class="btn btn-success"
+                                            href="{% url 'dashboard:customer:order-invoice' pk=object.pk %}"
+                                            target="_blank">
+                                             see invoice
+                                        </a>
+                                        {% endif %}
+                                        <a class="btn btn-primary btn-sm"
+                                            href="{% url 'dashboard:customer:order-detail' pk=object.pk %}">
+                                            see order</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <!-- End Card -->
+                    {% endfor %}
+
+                </ul>
+
+
+                <!-- Pagination -->
+
+                <div class="row pt-5 mt-3">
+                    <nav>
+                        {% if page_obj.has_other_pages %}
+                            <ul class="pagination justify-content-center">
+                                {% if page_obj.has_previous %}
+                                    <li class="page-item">
+                                        <button class="page-link"
+                                                onclick="changePage(`{{ page_obj.previous_page_number }}`)">Previous
+                                        </button>
+                                    </li>
+                                {% endif %}
+
+                                {% for i in page_obj.paginator.page_range %}
+                                    {% if page_obj.number == i %}
+                                        <li class="page-item active"><a class="page-link">{{ i }}</a></li>
+                                    {% elif i > page_obj.number|add:'-3' and i < page_obj.number|add:'3' %}
+                                        <li class="page-item">
+                                            <button class="page-link"
+                                                    onclick="changePage(`{{ i }}`)">{{ i }}</button>
+                                        </li>
+
+                                    {% endif %}
+                                {% endfor %}
+                                {% if page_obj.has_next %}
+                                    <li class="page-item">
+                                        <button class="page-link"
+                                                onclick="changePage(`{{ page_obj.next_page_number }}`)">Next
+                                        </button>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        {% endif %}
+                    </nav>
+                    <!-- End Pagination -->
+                </div>
+                <!-- End Pagination -->
+            </div>
+
+
+        </div>
+        <!-- End Tab Content -->
+    </div>
+    <!-- End Body -->
+</div>
+</div>
+</div>
+{% block extra_js %}
+<script>
+
+    $(document).ready(function () {
+                let current_url_params = new URLSearchParams(window.location.search)
+                $("#page-size-filter").val(current_url_params.get("page_size") || "")
+                $("#order-by-filter").val(current_url_params.get("order_by") || "")
+                $("#search-query-filter").val(current_url_params.get("q") || "")
+                $("#search-query-filter").val(current_url_params.get("q") || "")
+                $("#status-type-filter").val(current_url_params.get("status") || "")
+
+            });
+            $('#page-size-filter').change(function () {
+                let current_url_params = new URLSearchParams(window.location.search)
+                var selectedOption = $(this).val();
+                current_url_params.set("page_size", selectedOption)
+                let new_url = window.location.pathname + "?" + current_url_params.toString()
+                window.location.href = new_url
+            });
+            $('#order-by-filter').change(function () {
+                let current_url_params = new URLSearchParams(window.location.search)
+                var selectedOption = $(this).val();
+                current_url_params.set("order_by", selectedOption)
+                let new_url = window.location.pathname + "?" + current_url_params.toString()
+                window.location.href = new_url
+            });
+
+    function changePage(page_number) {
+                let current_url_params = new URLSearchParams(window.location.search)
+                current_url_params.set("page", page_number)
+                let new_url = window.location.pathname + "?" + current_url_params.toString()
+                window.location.href = new_url
+
+            }
+
+</script>
+{% endblock extra_js %}
+<!-- End Card -->
+{% endblock %}
+

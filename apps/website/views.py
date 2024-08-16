@@ -8,5 +8,5 @@ class IndexView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(IndexView, self).get_context_data(**kwargs)
-        context['categories'] = ProductCategoryModel.objects.all()
+        context['categories'] = ProductCategoryModel.objects.prefetch_related("children", "products").all()
         return context

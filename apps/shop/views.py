@@ -25,7 +25,7 @@ class ShopProductListView(ListView):
         return self.request.GET.get('page_size', self.paginate_by)
 
     def get_queryset(self):
-        queryset = ProductModel.objects.filter(
+        queryset = ProductModel.objects.prefetch_related("category", "product_images").filter(
             status=ProductStatusType.publish.value)
         min_price = self.request.GET.get('min_price')
         max_price = self.request.GET.get('max_price')
@@ -47,7 +47,7 @@ class ShopProductListView(ListView):
         context["total_items"] = self.get_queryset().count()
         context["wishlist_items"] = WishlistProductModel.objects.filter(user=self.request.user).values_list(
             "product__id", flat=True) if self.request.user.is_authenticated else []
-        context["categories"] = ProductCategoryModel.objects.all()
+        context["categories"] = ProductCategoryModel.objects.prefetch_related("products","children").all()
         return context
 
 
@@ -61,9 +61,9 @@ class ShopProductDetailView(DetailView):
         product = self.get_object()
         context["is_wished"] = WishlistProductModel.objects.filter(
             user=self.request.user, product__id=product.id).exists() if self.request.user.is_authenticated else False
-        product_categories = product.category.all()
+        product_categories = product.category.prefetch_related("children").all()
 
-        suggested_products = ProductModel.objects.filter(
+        suggested_products = ProductModel.objects.prefetch_related("category", "product_images").filter(
             Q(category__in=product_categories) &
             ~Q(id=product.id)  # Exclude the current video from the results
         ).order_by('?').distinct()[:5]
